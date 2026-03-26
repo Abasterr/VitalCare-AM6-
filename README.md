@@ -94,16 +94,18 @@ python manage.py startapp agenda
 - class Agenda(models.Model):
 
 ## Agregamos modelos al archivo "settings.py" de la app agenda
+- class PersonaAdmin(admin.ModelAdmin):
 - @admin.register(Especialidad)
 class EspecialidadAdmin(admin.ModelAdmin):
 - @admin.register(Doctor)
-class DoctorAdmin(admin.ModelAdmin):
+class DoctorAdmin(PersonaAdmin):
 - @admin.register(Paciente)
-class PacienteAdmin(admin.ModelAdmin):
+class PacienteAdmin(PersonaAdmin):
 - @admin.register(Agenda)
 class AgendaAdmin(admin.ModelAdmin):
 
-### Además aquí agregamos el método de cálculo de edad a partir de la fecha de nacimiento en los modelos de doctor y paciente
+### La clase PersonaAdmin hereda de admin.ModelAdmin y agrega, bajo su nombre el procedimiento para el cálculo de edad para doctores y pacientes.
+
 ```sh
     @admin.display(description='edad')
     def get_edad(self, obj):
@@ -117,3 +119,8 @@ class AgendaAdmin(admin.ModelAdmin):
 - - Si hoy es 10 de marzo y tu cumpleaños es el 20 de marzo, la condición (3, 10) < (3, 20) es Verdadera (True).
 - - En Python, True vale 1 y False vale 0.
 - - Si aún no has cumplido años este año, resta 1 al cálculo anterior. Si ya los cumpliste, resta 0.
+
+### Los modelos de doctores y pacientes heredan entonces los procedimientos de la clase PersonaAdmin y a través de ella los de admin.ModelAdmin
+
+## Agregamos la app creada en el listado de INSTALLED_APPS del archivo "settings.py"
+![alt text](img/image-6.png)
