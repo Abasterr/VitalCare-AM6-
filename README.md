@@ -34,9 +34,9 @@ python -m venv venv
 django-admin startproject clinica .
 ```
 
-## Instalamos el driver de conexión
+## Instalamos el driver de conexión a la base de datos
 ```sh
-pip install django psycopg2-binary
+pip install psycopg2-binary
 ```
 
 ## Instalamos los "motores" de encriptación a utilizar en el proyecto
@@ -124,3 +124,36 @@ class AgendaAdmin(admin.ModelAdmin):
 
 ## Agregamos la app creada en el listado de INSTALLED_APPS del archivo "settings.py"
 ![alt text](img/image-6.png)
+
+## Realizamos migraciones
+### 1. Creamos las migraciones
+```sh
+python manage.py makemigrations
+```
+
+### 2. Ejecutamos las migraciones
+```sh
+python manage.py migrate
+```
+
+## Creamos archivo forms.py en app "agenda"
+### Se agregan los formularios:
+- EspecialidadForm
+- DoctorForm
+- PacienteForm
+- AgedaForm
+
+## Modificamos el archivo views.py de la app "agenda"
+### Se agregan las vistas relacionadas a:
+- Especialidades
+- Doctores
+- Pacientes
+- Agenda (Citas)
+
+## Creamos el archivo urls.py de la app "agenda"
+### Se agregan los path para:
+- Especialidades
+- Doctores
+- Pacientes
+- Agenda (Citas)
+
