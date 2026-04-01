@@ -1,8 +1,12 @@
 from django.urls import path
 from . import views
+# Ya no necesitas RedirectView porque estás usando views.dashboard directamente
 
 urlpatterns = [
-    # Registro y Autenticación
+    # Dashboard (Página de Inicio)
+    path('', views.dashboard, name='dashboard'), # <-- Coma corregida aquí
+    
+    # Registro de Usuarios
     path('registro/', views.RegistroUsuarioView.as_view(), name='registro'),
 
     # ESPECIALIDADES

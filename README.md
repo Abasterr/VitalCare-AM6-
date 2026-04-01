@@ -157,3 +157,13 @@ python manage.py migrate
 - Pacientes
 - Agenda (Citas)
 
+## Cremos archivo .env para el manejo de claves personales de django y base de datos
+![alt text](img/image-7.png)
+
+- El archivo '.env' se encuentra en la raíz de la aplicación y está integrado en el archivo '.gitignore' para no ser incluido en el repositorio virtual
+- Configuramos además, el archivo 'settings.py' para reconocer los datos desde el archivo '.env'
+
+## Instalamos la librería decouple para utilizar la configuración anterior y la importamos en settings.py
+```sh
+pip install python-decouple
+```

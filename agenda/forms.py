@@ -32,12 +32,13 @@ class AgendaForm(forms.ModelForm):
             'motivo': forms.TextInput(attrs={'class': 'form-control'}),
             'paciente': forms.Select(attrs={'class': 'form-control'}),
             'doctor': forms.Select(attrs={'class': 'form-control'}),
+            'estado': forms.Select(attrs={'class': 'form-control'}),
         }
 
 class EspecialidadForm(forms.ModelForm):
     class Meta:
         model = Especialidad
-        fields = ['nombre',]
+        fields = '__all__'
         widgets = {
             'nombre': forms.TextInput(attrs={'class': 'form-control'}),
         }

@@ -22,10 +22,16 @@ class Paciente(models.Model):
         return f"{self.nombre} {self.apellido}"
 
 class Agenda(models.Model):
+    ESTADOS = [
+        ('P', 'Pendiente'),
+        ('R', 'Realizada'),
+        ('C', 'Cancelada'),
+    ]
     paciente = models.ForeignKey(Paciente, on_delete=models.CASCADE, related_name='citas')
     doctor = models.ForeignKey(Doctor, on_delete=models.CASCADE, related_name='citas')
     hora = models.TimeField()
     fecha = models.DateField()
     motivo = models.CharField(max_length=200)
+    estado = models.CharField(max_length=1, choices=ESTADOS, default='P')
     def __str__(self):
         return f"{self.fecha} {self.hora} - {self.paciente} con {self.doctor}"

@@ -7,6 +7,7 @@ from .forms import PacienteForm, DoctorForm, EspecialidadForm, AgendaForm
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.messages.views import SuccessMessageMixin
+from django.contrib.auth.decorators import login_required
 
 class RegistroUsuarioView(CreateView):
     form_class = UserCreationForm
@@ -23,25 +24,26 @@ class RegistroUsuarioView(CreateView):
 
 class EspecialidadListView(LoginRequiredMixin, ListView):
     model = Especialidad
-    template_name = 'especialidad.list.html'
+    template_name = 'especialidad_list.html'
     context_object_name = 'especialidades'
 
 class EspecialidadCreateView(LoginRequiredMixin, SuccessMessageMixin, CreateView):
     model = Especialidad
     form_class = EspecialidadForm
-    template_name = 'especialidad_form.html'
+    template_name = 'form_generico.html'
     success_url = reverse_lazy('especialidad_list')
     success_message = "Especialidad agregada exitosamente."
 
 class EspecialidadUpdateView(LoginRequiredMixin, SuccessMessageMixin, UpdateView):
     model = Especialidad
     form_class = EspecialidadForm
-    template_name = 'especialidad_form.html'
+    template_name = 'form_generico.html'
     success_url = reverse_lazy('especialidad_list')
     success_message = "Especialidad actualizada exitosamente."
 
 class EspecialidadDeleteView(LoginRequiredMixin, SuccessMessageMixin, DeleteView):
     model = Especialidad
+    template_name = 'confirm_delete.html'
     success_url = reverse_lazy('especialidad_list')
 
     def form_valid(self, form):
@@ -60,19 +62,20 @@ class DoctorListView(LoginRequiredMixin, ListView):
 class DoctorCreateView(LoginRequiredMixin, SuccessMessageMixin, CreateView):
     model = Doctor
     form_class = DoctorForm
-    template_name = 'doctor_form.html'
+    template_name = 'form_generico.html'
     success_url = reverse_lazy('doctor_list')
     success_message = "Doctor registrado correctamente."
 
 class DoctorUpdateView(LoginRequiredMixin, SuccessMessageMixin, UpdateView):
     model = Doctor
     form_class = DoctorForm
-    template_name = 'doctor_form.html'
+    template_name = 'form_generico.html'
     success_url = reverse_lazy('doctor_list')
     success_message = "Doctor actualizado exitosamente."
 
 class DoctorDeleteView(LoginRequiredMixin, SuccessMessageMixin, DeleteView):
     model = Doctor
+    template_name = 'confirm_delete.html'
     success_url = reverse_lazy('doctor_list')
 
     def form_valid(self, form):
@@ -91,19 +94,20 @@ class PacienteListView(LoginRequiredMixin, ListView):
 class PacienteCreateView(LoginRequiredMixin, SuccessMessageMixin, CreateView):
     model = Paciente
     form_class = PacienteForm
-    template_name = 'paciente_form.html'
+    template_name = 'form_generico.html'
     success_url = reverse_lazy('paciente_list')
     success_message = "Paciente registrado correctamente."
 
 class PacienteUpdateView(LoginRequiredMixin, SuccessMessageMixin, UpdateView):
     model = Paciente
     form_class = PacienteForm
-    template_name = 'paciente_form.html'
+    template_name = 'form_generico.html'
     success_url = reverse_lazy('paciente_list')
     success_message = "Paciente actualizado exitosamente."
 
 class PacienteDeleteView(LoginRequiredMixin, SuccessMessageMixin, DeleteView):
     model = Paciente
+    template_name = 'confirm_delete.html'
     success_url = reverse_lazy('paciente_list')
 
     def form_valid(self, form):
@@ -123,21 +127,31 @@ class AgendaListView(LoginRequiredMixin, ListView):
 class AgendaCreateView(LoginRequiredMixin, SuccessMessageMixin, CreateView):
     model = Agenda
     form_class = AgendaForm
-    template_name = 'agenda_form.html'
+    template_name = 'form_generico.html'
     success_url = reverse_lazy('agenda_list')
     success_message = "Cita agendada exitosamente."
 
 class AgendaUpdateView(LoginRequiredMixin, SuccessMessageMixin, UpdateView):
     model = Agenda
     form_class = AgendaForm
-    template_name = 'agenda_form.html'
+    template_name = 'form_generico.html'
     success_url = reverse_lazy('agenda_list')
     success_message = "Cita modificada correctamente."
 
 class AgendaDeleteView(LoginRequiredMixin, SuccessMessageMixin, DeleteView):
     model = Agenda
+    template_name = 'confirm_delete.html'
     success_url = reverse_lazy('agenda_list')
 
     def form_valid(self, form):
         messages.success(self.request, "Cita cancelada/eliminada correctamente")
         return super().form_valid(form)
+    
+@login_required
+def dashboard(request):
+    context = {
+        'total_pacientes': Paciente.objects.count(),
+        'total_doctores': Doctor.objects.count(),
+        'proximas_citas': Agenda.objects.filter(estado='P').order_by('fecha', 'hora')[:5],
+    }
+    return render(request, 'dashboard.html', context)
