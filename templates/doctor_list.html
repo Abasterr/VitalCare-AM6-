@@ -1,15 +1,17 @@
 {% extends 'base.html' %}
 {% block content %}
 <div class="d-flex justify-content-between align-items-center mb-4">
-    <h2 class="fw-bold text-primary">Equipo Médico</h2>
+    <h2 class="fw-bold text-primary"><i class="fa-solid fa-user-doctor"></i>Equipo Médico</h2>
     <a href="{% url 'doctor_create' %}" class="btn btn-primary">Registrar Doctor</a>
+
 </div>
 <div class="card border-0 shadow-sm">
     <table class="table table-hover mb-0">
         <thead class="table-light">
             <tr>
-                <th>Nombre</th>
-                <th>Especialidad</th>
+                <th><i class="fa-solid fa-user-md me-2"></i>Nombre</th>
+                <th><i class="fa-solid fa-clock me-2"></i>Edad</th> <!-- Agregamos este encabezado -->
+                <th><i class="fa-solid fa-stethoscope me-2"></i>Especialidad</th>
                 <th class="text-center">Acciones</th>
             </tr>
         </thead>
@@ -17,10 +19,15 @@
             {% for doctor in doctores %}
             <tr>
                 <td>{{ doctor.nombre }} {{ doctor.apellido }}</td>
+                <td>{{ doctor.calcular_edad }} años</td> <!-- Ahora coincide con su columna -->
                 <td><span class="badge bg-info text-dark">{{ doctor.especialidad }}</span></td>
                 <td class="text-center">
-                    <a href="{% url 'doctor_update' doctor.pk %}" class="btn btn-sm btn-outline-info">Editar</a>
-                    <a href="{% url 'doctor_delete' doctor.pk %}" class="btn btn-sm btn-outline-danger">Borrar</a>
+                    <a href="{% url 'doctor_update' doctor.pk %}" class="btn btn-primary btn-sm me-1">
+                        <i class="fa-solid fa-pen-to-square"></i> Editar
+                    </a>
+                    <a href="{% url 'doctor_delete' doctor.pk %}" class="btn btn-danger btn-sm">
+                        <i class="fa-solid fa-trash-can"></i> Borrar
+                    </a>
                 </td>
             </tr>
             {% endfor %}

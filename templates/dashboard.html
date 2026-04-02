@@ -1,74 +1,98 @@
 {% extends 'base.html' %}
 
 {% block content %}
-<div class="row mb-4">
-    <div class="col-12">
-        <h2 class="fw-light">Bienvenido al Panel de Control de <strong>VitalCare</strong></h2>
-        <p class="text-muted">Resumen actual de la clínica al {{ now|date:"d/m/Y" }}</p>
+<h2 class="mb-4 fw-bold">
+    <i class="fa-solid fa-wave-square text-primary me-2"></i>
+    Panel de Gestión <span class="text-muted fw-light">| <i
+            class="fa-solid fa-house-chimney-medical"></i>VitalCare</span>
+</h2>
+
+
+<div class="row g-4 mb-5 text-center">
+    <!-- Tarjeta Pacientes -->
+    <div class="col-md-4">
+        <a href="{% url 'paciente_list' %}" class="text-decoration-none">
+            <div class="card p-4 border-0 shadow-sm h-100 dashboard-card"
+                style="background-color: var(--pantone-primary); color: white;">
+                <div class="card-body">
+                    <i class="fa-solid fa-users fa-2x mb-3"></i>
+                    <h6 class="text-uppercase small fw-bold mb-2">Pacientes</h6>
+                    <h3 class="display-5 fw-bold mb-0 text-white">{{ total_pacientes }}</h3>
+                </div>
+            </div>
+        </a>
+    </div>
+
+    <!-- Tarjeta Doctores -->
+    <div class="col-md-4">
+        <a href="{% url 'doctor_list' %}" class="text-decoration-none">
+            <div class="card p-4 border-0 shadow-sm h-100 dashboard-card"
+                style="background-color: var(--pantone-secondary); color: white;">
+                <div class="card-body">
+                    <i class="fa-solid fa-user-doctor fa-2x mb-3"></i>
+                    <h6 class="text-uppercase small fw-bold mb-2">Doctores</h6>
+                    <h3 class="display-5 fw-bold mb-0 text-white">{{ total_doctores }}</h3>
+                </div>
+            </div>
+        </a>
+    </div>
+
+    <!-- Tarjeta Citas Totales -->
+    <div class="col-md-4">
+        <a href="{% url 'agenda_list' %}" class="text-decoration-none">
+            <div class="card p-4 border-0 shadow-sm h-100 dashboard-card"
+                style="background-color: var(--pantone-success); color: var(--pantone-secondary);">
+                <div class="card-body">
+                    <i class="fa-solid fa-calendar-check fa-2x mb-3"></i>
+                    <h6 class="text-uppercase small fw-bold mb-2">Citas Totales</h6>
+                    <h3 class="display-5 fw-bold mb-0">{{ total_citas }}</h3>
+                </div>
+            </div>
+        </a>
     </div>
 </div>
 
-<div class="row g-4 mb-5">
-    <div class="col-md-4">
-        <div class="card border-0 shadow-sm bg-white h-100 p-3">
-            <div class="d-flex align-items-center">
-                <div class="flex-shrink-0 bg-primary-subtle text-primary p-3 rounded">
-                    <i class="bi bi-people-fill h2"></i>
-                </div>
-                <div class="flex-grow-1 ms-3">
-                    <h6 class="text-muted mb-0">Pacientes</h6>
-                    <h3 class="fw-bold mb-0">{{ total_pacientes }}</h3>
-                </div>
-            </div>
-        </div>
-    </div>
-    <div class="col-md-4">
-        <div class="card border-0 shadow-sm bg-white h-100 p-3">
-            <div class="d-flex align-items-center">
-                <div class="flex-shrink-0 bg-success-subtle text-success p-3 rounded">
-                    <i class="bi bi-person-badge-fill h2"></i>
-                </div>
-                <div class="flex-grow-1 ms-3">
-                    <h6 class="text-muted mb-0">Doctores</h6>
-                    <h3 class="fw-bold mb-0">{{ total_doctores }}</h3>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
 
-<div class="card border-0 shadow-sm">
-    <div class="card-header bg-white border-0 py-3">
-        <h5 class="mb-0 fw-bold"><i class="bi bi-calendar-event me-2 text-primary"></i>Próximas Citas Pendientes</h5>
+<div class="card shadow-sm">
+    <div class="card-header bg-white py-3 d-flex align-items-center border-bottom">
+        <h5 class="mb-0 fw-bold">
+            <i class="fa-solid fa-calendar-day me-2 text-primary"></i>Resumen de Citas Pendientes
+        </h5>
+        <!-- Tu círculo morado Pantone -->
+        <span class="badge rounded-pill ms-2 px-3 py-2"
+            style="background-color: var(--pantone-secondary); color: white; font-size: 0.9rem;">
+            {{ proximas_citas.count }}
+        </span>
     </div>
+
     <div class="card-body">
-        <table class="table table-hover align-middle">
-            <thead class="table-light">
+        <table class="table table-hover">
+            <thead>
                 <tr>
-                    <th>Fecha / Hora</th>
+                    <th>Fecha</th>
+                    <th>Hora</th>
                     <th>Paciente</th>
                     <th>Doctor</th>
-                    <th>Motivo</th>
                 </tr>
             </thead>
             <tbody>
                 {% for cita in proximas_citas %}
                 <tr>
-                    <td>{{ cita.fecha|date:"d M" }} - {{ cita.hora|time:"H:i" }}</td>
-                    <td class="fw-bold">{{ cita.paciente }}</td>
+                    <td>{{ cita.fecha|date:"d/m/Y" }}</td>
+                    <td>{{ cita.hora }}</td>
+                    <td>{{ cita.paciente }}</td>
                     <td>{{ cita.doctor }}</td>
-                    <td><small class="text-muted">{{ cita.motivo }}</small></td>
                 </tr>
                 {% empty %}
                 <tr>
-                    <td colspan="4" class="text-center py-4 text-muted">No hay citas pendientes para hoy.</td>
+                    <td colspan="4" class="text-center text-muted" style="color: var(--pantone-secondary);">No hay citas
+                        pendientes.</td>
                 </tr>
                 {% endfor %}
             </tbody>
         </table>
-        <div class="text-end">
-            <a href="{% url 'agenda_list' %}" class="btn btn-link btn-sm text-decoration-none">Ver toda la agenda →</a>
-        </div>
+        <a href="{% url 'agenda_list' %}" class="btn btn-link p-0 text-decoration-none"
+            style="color: var(--pantone-secondary);">Ver toda la agenda →</a>
     </div>
 </div>
 {% endblock %}

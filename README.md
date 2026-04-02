@@ -1,169 +1,80 @@
-# **Paso a Paso de creación del proyecto**
+# 🏥 VitalCare - Sistema de Gestión Clínica
 
-## Creamos carpeta contenedora del proyecto
-VitalCare
+**VitalCare** es una plataforma web integral desarrollada con **Django 6.0**, diseñada para la administración eficiente de centros médicos. El sistema permite la gestión completa de pacientes, personal médico, especialidades y el agendamiento de horas, integrando una base de datos robusta y una interfaz moderna y amigable.
 
-## Abrimos PowerShell y ubicamos la ruta de la carpeta
-.../VitalCare
+---
 
-## Abrimos VSCode desde la carpeta desde PowerShell
+## 🚀 Características del Proyecto (Cumplimiento de Actividad)
 
-```sh
-code .
-```
+### 1. Entorno de Desarrollo y Seguridad
+*   **Virtualenv:** Proyecto aislado en un entorno virtual propio (`venv`).
+*   **Cifrado BCrypt:** Implementación de `BCryptSHA256PasswordHasher` para el almacenamiento seguro de contraseñas de usuarios.
+*   **Seguridad de Credenciales:** Uso de `python-decouple` para gestionar claves secretas y datos de conexión a la DB mediante un archivo `.env`.
 
-## Creamos un entorno virtual
+### 2. Base de Datos Relacional (PostgreSQL)
+*   **Motor de Base de Datos:** Configuración completa con **PostgreSQL** mediante el driver `psycopg2`.
+*   **Modelo de Datos:** Implementación de relaciones `ForeignKey` con integridad referencial (`on_delete=models.CASCADE`) y nombres relacionados para consultas inversas eficientes.
 
-```sh
-python -m venv venv
-```
- 
-## Activamos entorno virtual 
+### 3. Lógica de Negocio y Estándar DRY
+*   **Clase Abstracta `Persona`:** Centralización de campos comunes (`nombre`, `apellido`, `fecha_nacimiento`) y el método de **cálculo de edad** para evitar duplicidad de código en `Doctor` y `Paciente`.
+*   **Gestión de Citas:** Sistema de agenda con selección de estados (Pendiente, Realizada, Cancelada) mediante `choices` de Django.
 
-```sh
-.\venv\Scripts\activate
-```
-## instalamos django (teniendo activado entorno virtual)
-```sh
- pip install django
-```
+### 4. Interfaz de Usuario (Bootstrap & UX)
+*   **Bootstrap 5:** Uso extensivo de componentes como Cards, Tables, Navbars y Modals para una experiencia responsiva.
+*   **Estilo Personalizado (Pantone):** Implementación de una paleta de colores corporativa (`--pantone-primary`, `--pantone-secondary`, etc.) definida en variables CSS.
+*   **Iconografía Amigable:** Integración de **FontAwesome 6** para facilitar la identificación visual de acciones (Editar, Borrar, Registrar).
 
-## Creamos el proyecto
+### 5. Administración y Roles de Usuario
+*   **Panel de Administración:** Personalización de `admin.py` con clases que heredan de `PersonaAdmin` para mostrar la edad calculada y filtros por especialidad.
+*   **Gestión de Usuarios Privada:** El registro de nuevos usuarios está restringido a **Superusuarios** mediante `UserPassesTestMixin`. 
+*   **Formulario de Registro Avanzado:** Permite al administrador decidir si el nuevo usuario tendrá permisos de staff/superuser mediante un interruptor visual.
 
-```sh
-django-admin startproject clinica .
-```
+### 6. Panel de Control (Dashboard)
+*   **Métricas en Tiempo Real:** Visualización dinámica del total de pacientes, doctores y citas agendadas.
+*   **Tarjetas Accionables:** Navegación fluida desde los contadores hacia los listados maestros.
+*   **Resumen de Citas:** Tabla de próximas consultas pendientes con contador visual morado para una gestión rápida.
 
-## Instalamos el driver de conexión a la base de datos
-```sh
-pip install psycopg2-binary
-```
+---
 
-## Instalamos los "motores" de encriptación a utilizar en el proyecto
-```sh
-pip install bcrypt
-```
+## 🛠️ Instalación y Configuración
 
-```sh
-pip install argon2-cffi
-```
+1.  **Clonar el repositorio:**
+    ```bash
+    git clone <url-del-repositorio>
+    cd VitalCare
+    ```
 
-## Creamos archivos de dependencias (requirements.txt)
-```sh
-pip freeze > requirements.txt
-```
+2.  **Activar Entorno Virtual:**
+    ```bash
+    .\venv\Scripts\activate
+    ```
 
-## Creamos base de datos desde PostgreSQL
-```sh
-CREATE DATABASE clinica;
-```
+3.  **Configurar el archivo .env:**
+    Crear un archivo `.env` en la raíz con los siguientes parámetros:
+    ```env
+    SECRET_KEY=django-insecure-tu-clave
+    DB_NAME=nombre_db
+    DB_USER=usuario_postgres
+    DB_PASSWORD=tu_password
+    DB_HOST=localhost
+    DB_PORT=5432
+    ```
 
-## Creamos la carpeta "templates" dentro de la raíz del proyecto
-![alt text](img/image.png)
+4.  **Instalar dependencias:**
+    ```bash
+    pip install -r requirements.txt
+    ```
 
-## Primeras configuraciones de archivo "settings.py"
+5.  **Migrar Base de Datos e Iniciar:**
+    ```bash
+    python manage.py migrate
+    python manage.py runserver
+    ```
 
-### Configuramos el acceso a la carpeta "templates".
-![alt text](img/image-2.png)
+---
 
-### Configuramos acceso a la base de datos.
-![alt text](img/image-3.png)
+## ✒️ Autor
+*   **Alfonso** - *Desarrollo Full Stack* - [Kibernum]
 
-### Incluimos PASWORD_HASHERS para su uso en encriptación.
-![alt text](img/image-4.png)
-
-### Camiamos idioma y zona horaria.
-![alt text](img/image-5.png)
-
-## Github
-- Se inicializa Github
-- Se pasan a stage archivos
-- Primer commit
-- Creación repositorio en web Github
-- Sincronización de repositorios local y web
-
-## Creamos la app "agenda" que será donde se registren las horas médicas
-```sh
-python manage.py startapp agenda
-```
-
-## Creamos modelos en el archivo "models.py" de la app agenda
-- class Especialidad(models.Model):
-- class Doctor(models.Model):
-- class Paciente(models.Model):
-- class Agenda(models.Model):
-
-## Agregamos modelos al archivo "settings.py" de la app agenda
-- class PersonaAdmin(admin.ModelAdmin):
-- @admin.register(Especialidad)
-class EspecialidadAdmin(admin.ModelAdmin):
-- @admin.register(Doctor)
-class DoctorAdmin(PersonaAdmin):
-- @admin.register(Paciente)
-class PacienteAdmin(PersonaAdmin):
-- @admin.register(Agenda)
-class AgendaAdmin(admin.ModelAdmin):
-
-### La clase PersonaAdmin hereda de admin.ModelAdmin y agrega, bajo su nombre el procedimiento para el cálculo de edad para doctores y pacientes.
-
-```sh
-    @admin.display(description='edad')
-    def get_edad(self, obj):
-        today = date.today()
-        return today.year - obj.fecha_nacimiento.year - ((today.month, today.day) < (obj.fecha_nacimiento.month, obj.fecha_nacimiento.day))
-```
-
-### Lógica del cálculo:
-- today.year - obj.fecha_nacimiento.year: Resta los años (ej: 2024 - 1990 = 34).
-- La resta final (- True o - False):
-- - Si hoy es 10 de marzo y tu cumpleaños es el 20 de marzo, la condición (3, 10) < (3, 20) es Verdadera (True).
-- - En Python, True vale 1 y False vale 0.
-- - Si aún no has cumplido años este año, resta 1 al cálculo anterior. Si ya los cumpliste, resta 0.
-
-### Los modelos de doctores y pacientes heredan entonces los procedimientos de la clase PersonaAdmin y a través de ella los de admin.ModelAdmin
-
-## Agregamos la app creada en el listado de INSTALLED_APPS del archivo "settings.py"
-![alt text](img/image-6.png)
-
-## Realizamos migraciones
-### 1. Creamos las migraciones
-```sh
-python manage.py makemigrations
-```
-
-### 2. Ejecutamos las migraciones
-```sh
-python manage.py migrate
-```
-
-## Creamos archivo forms.py en app "agenda"
-### Se agregan los formularios:
-- EspecialidadForm
-- DoctorForm
-- PacienteForm
-- AgedaForm
-
-## Modificamos el archivo views.py de la app "agenda"
-### Se agregan las vistas relacionadas a:
-- Especialidades
-- Doctores
-- Pacientes
-- Agenda (Citas)
-
-## Creamos el archivo urls.py de la app "agenda"
-### Se agregan los path para:
-- Especialidades
-- Doctores
-- Pacientes
-- Agenda (Citas)
-
-## Cremos archivo .env para el manejo de claves personales de django y base de datos
-![alt text](img/image-7.png)
-
-- El archivo '.env' se encuentra en la raíz de la aplicación y está integrado en el archivo '.gitignore' para no ser incluido en el repositorio virtual
-- Configuramos además, el archivo 'settings.py' para reconocer los datos desde el archivo '.env'
-
-## Instalamos la librería decouple para utilizar la configuración anterior y la importamos en settings.py
-```sh
-pip install python-decouple
-```
+---
+*Este proyecto fue desarrollado como parte de la Actividad del Módulo 6 de Django Avanzado.*

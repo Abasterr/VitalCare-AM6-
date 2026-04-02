@@ -14,117 +14,103 @@ body {
     color: var(--text-color);
 }
 
+/* --- NAVBAR --- */
 .navbar {
     background-color: var(--pantone-primary) !important;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+    border-bottom: 2px solid rgba(0, 0, 0, 0.05);
 }
 
-/* Agrupacion de selectores para estilos comunes */
 .navbar-brand,
 .nav-link {
     color: #fff !important;
     font-weight: 600;
 }
 
-/* Efecto hover es una pseudo-clase */
-.nav-link:hover {
-    color: var(--pantone-secondary) !important;
-    transform: translateY(-2px);
-    transition: all 0.3s ease;
-}
-
-/* cards y contenedores */
-
+/* --- CARDS --- */
 .card {
     border: none;
     border-radius: 15px;
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
     background-color: #fff;
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
-.card:hover {
-    transform: scale(1.001);
-    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+.dashboard-card {
+    cursor: pointer;
 }
 
-/* Buttons */
+.display-6 {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    letter-spacing: -1px;
+}
 
+/* --- BOTONES --- */
 .btn {
     border-radius: 20px;
     padding: 8px 20px;
     font-weight: 500;
     border: none;
-    transition: all 0.3s ease;
 }
 
 .btn-primary {
     background-color: var(--pantone-primary);
-    color: #333;
-}
-
-.btn-primary:hover {
-    background-color: #8bbce5;
-    transform: scale(1.05);
+    color: #fff !important;
 }
 
 .btn-secondary {
     background-color: var(--pantone-secondary);
-    color: #333;
-}
-
-.btn-secondary:hover {
-    background-color: #a9cfed;
-    transform: scale(1.05);
+    color: #fff !important;
 }
 
 .btn-success {
     background-color: var(--pantone-success);
-    color: #333;
-}
-
-.btn-success:hover {
-    background-color: #b5e3ab;
-    transform: scale(1.05);
+    color: #333 !important;
 }
 
 .btn-danger {
     background-color: var(--pantone-danger);
-    color: #333;
-}
-
-.btn-danger:hover {
-    background-color: #e59b9b;
-    transform: scale(1.05);
+    color: #fff !important;
 }
 
 .btn-warning {
     background-color: var(--pantone-warning);
-    color: #333;
+    color: #333 !important;
 }
 
-.btn-warning:hover {
-    background-color: #e5e5a3;
-    transform: scale(1.05);
+.btn i {
+    margin-right: 5px;
 }
 
-/* Forms */
+.table .btn {
+    padding: 5px 12px;
+    font-size: 0.85rem;
+}
 
+/* --- FORMULARIOS --- */
 .form-control {
     border-radius: 10px;
     border: 1px solid #dee2e6;
     padding: 10px 15px;
 }
 
-.form-control:focus {
-    border-color: var(--pantone-primary);
-    box-shadow: 0 0 0 0.2rem rgba(162, 210, 255, 0.25);
+#id_es_administrador {
+    width: 1.2rem;
+    height: 1.2rem;
+    margin: 0 !important;
+    border: 2px solid var(--pantone-secondary) !important;
+    border-radius: 4px;
+    cursor: pointer;
+    appearance: auto;
 }
 
-/* Tables */
+#id_es_administrador:checked {
+    background-color: var(--pantone-secondary) !important;
+    border-color: var(--pantone-secondary) !important;
+}
 
+/* --- TABLAS --- */
 .table {
     border-collapse: separate;
+    border-spacing: 0 5px;
+    /* Da un aire entre filas */
 }
 
 .table thead th {
@@ -135,26 +121,11 @@ body {
     font-size: 0.85rem;
 }
 
-.table tbody td {
-    background-color: #fff;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.02);
-    border-radius: 10px;
-    transition: transform 0.3s ease;
-}
-
-.table tbody tr:hover {
-    transform: scale(1.01);
-}
-
 .table td {
     vertical-align: middle;
-    /* Centra el texto o los botones perfectamente en medio (arriba y abajo) */
     border: none;
+    background-color: #fff;
 }
-
-/* Truco maestro para las tablas 
-las filas (tr)  cuando tengas problemas  para redondear las esquinas de las tablas, lo que puedes hacer es redondear las celdas (td) de la primera y última columna, así se verá como si toda la fila tuviera las esquinas redondeadas.
-*/
 
 .table td:first-child {
     border-top-left-radius: 10px;
@@ -164,4 +135,80 @@ las filas (tr)  cuando tengas problemas  para redondear las esquinas de las tabl
 .table td:last-child {
     border-top-right-radius: 10px;
     border-bottom-right-radius: 10px;
+}
+
+/* --- ESTADOS --- */
+
+.v-estado {
+    display: inline-block !important;
+    padding: 8px 16px !important;
+    border-radius: 50px !important;
+    font-weight: 700 !important;
+    font-size: 0.75rem !important;
+    text-transform: uppercase;
+    text-align: center;
+    min-width: 100px;
+    line-height: 1;
+    /* Aseguramos que no herede transparencias */
+    opacity: 1 !important;
+    visibility: visible !important;
+}
+
+.v-pendiente {
+    background-color: var(--pantone-warning) !important;
+    color: #5a5635 !important;
+}
+
+.v-realizada {
+    background-color: var(--pantone-success) !important;
+    color: #2d4d30 !important;
+}
+
+.v-cancelada {
+    background-color: var(--pantone-danger) !important;
+    color: #ffffff !important;
+}
+
+/* --- UNIFICACIÓN DE TÍTULOS--- */
+
+h1,
+h2,
+h3,
+.text-primary {
+    color: var(--pantone-secondary) !important;
+    font-weight: 700;
+    letter-spacing: -0.5px;
+}
+
+/* Si quieres que el icono del título también combine */
+h2 i,
+h1 i {
+    color: var(--pantone-secondary);
+    margin-right: 10px;
+}
+
+/* --- ANIMACIÓN ESPECÍFICA PARA DASHBOARD --- */
+
+.dashboard-card {
+    /* Permitimos transición solo aquí */
+    transition: transform 0.3s ease, box-shadow 0.3s ease !important;
+}
+
+.dashboard-card:hover {
+    /* Eleva la tarjeta 10px */
+    transform: translateY(-10px) !important;
+    /* Añade una sombra más profunda para dar efecto de altura */
+    box-shadow: 0 12px 24px rgba(0, 0, 0, 0.15) !important;
+    filter: brightness(1.05);
+    /* Un brillo sutil */
+}
+
+/* Evitamos que el texto de la tarjeta se mueva bruscamente */
+.dashboard-card .card-body {
+    transition: none !important;
+}
+
+h2 span i:hover {
+    color: var(--pantone-primary);
+    transition: color 0.3s ease;
 }

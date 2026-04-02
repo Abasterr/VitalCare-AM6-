@@ -3,20 +3,27 @@ from .models import Agenda, Doctor, Paciente, Especialidad
 from django.views.generic import ListView, CreateView, UpdateView, DeleteView
 from django.urls import reverse_lazy
 from django.contrib import messages
-from .forms import PacienteForm, DoctorForm, EspecialidadForm, AgendaForm
-from django.contrib.auth.mixins import LoginRequiredMixin
+from .forms import PacienteForm, DoctorForm, EspecialidadForm, AgendaForm, RegistroAdminForm
+from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.messages.views import SuccessMessageMixin
 from django.contrib.auth.decorators import login_required
 
-class RegistroUsuarioView(CreateView):
+from django.contrib.auth.mixins import UserPassesTestMixin
+
+class RegistroUsuarioView(LoginRequiredMixin, UserPassesTestMixin, CreateView):
     form_class = UserCreationForm
     template_name = 'registration/registro.html'
-    success_url = reverse_lazy('login')
+    success_url = reverse_lazy('dashboard') # Redirige al dashboard tras crear
     
+    # Esta función permite registrar usuarios solo a usuarios administradores
+    def test_func(self):
+        return self.request.user.is_superuser
+
     def form_valid(self, form):
-        messages.success(self.request, "Usuario registrado exitosamente. Ahora puedes iniciar sesión.")
+        messages.success(self.request, "Nuevo usuario administrativo creado con éxito.")
         return super().form_valid(form)
+
 
 # =====================================
 #  *VISTAS RELACIONADAS A ESPECIALIDAD
@@ -147,11 +154,28 @@ class AgendaDeleteView(LoginRequiredMixin, SuccessMessageMixin, DeleteView):
         messages.success(self.request, "Cita cancelada/eliminada correctamente")
         return super().form_valid(form)
     
+# =====================================
+#  *Login y Registro
+# =====================================
+    
 @login_required
 def dashboard(request):
     context = {
         'total_pacientes': Paciente.objects.count(),
         'total_doctores': Doctor.objects.count(),
-        'proximas_citas': Agenda.objects.filter(estado='P').order_by('fecha', 'hora')[:5],
+        'total_citas': Agenda.objects.count(), # Contador total
+        'proximas_citas': Agenda.objects.filter(estado='P').order_by('fecha', 'hora')[:5], # Solo las 5 pendientes más cercanas
     }
     return render(request, 'dashboard.html', context)
+
+class RegistroUsuarioView(LoginRequiredMixin, UserPassesTestMixin, CreateView):
+    form_class = RegistroAdminForm # <--- USAMOS EL NUEVO FORMULARIO
+    template_name = 'registration/registro.html'
+    success_url = reverse_lazy('dashboard')
+    
+    def test_func(self):
+        return self.request.user.is_superuser
+
+    def form_valid(self, form):
+        messages.success(self.request, "Usuario creado exitosamente con los permisos asignados.")
+        return super().form_valid(form)
