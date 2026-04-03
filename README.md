@@ -73,8 +73,8 @@
 
 ---
 
-## ✒️ Autor
-*   **Alfonso** - *Desarrollo Full Stack* - [Kibernum]
+## Grupo 2
+### Integrantes: Alfonso Basterrechea - Viviana Canales - Sebastián Toledo - Cristofer Henríquez
 
 ---
 *Este proyecto fue desarrollado como parte de la Actividad del Módulo 6 de Django Avanzado.*
